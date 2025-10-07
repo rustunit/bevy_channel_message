@@ -2,9 +2,9 @@ use bevy::prelude::*;
 use crossbeam_channel::{Receiver, Sender, TryRecvError, TrySendError};
 
 #[derive(Resource, Clone, Debug)]
-pub struct CrossbeamMessageSender<T: Message>(Sender<T>);
+pub struct ChannelMessageSender<T: Message>(Sender<T>);
 
-impl<T: Message> CrossbeamMessageSender<T> {
+impl<T: Message> ChannelMessageSender<T> {
     pub fn send(&self, event: impl Into<T>) {
         let event = event.into();
         if let Err(err) = self.0.try_send(event) {
@@ -19,17 +19,17 @@ impl<T: Message> CrossbeamMessageSender<T> {
 }
 
 #[derive(Resource)]
-struct CrossbeamMessageReceiver<T: Message>(Receiver<T>);
+struct ChannelMessageReceiver<T: Message>(Receiver<T>);
 
-pub trait CrossbeamMessageApp {
+pub trait ChannelMessageApp {
     fn add_channel_message<T: Message>(&mut self) -> &mut Self;
 }
 
-impl CrossbeamMessageApp for App {
+impl ChannelMessageApp for App {
     fn add_channel_message<T: Message>(&mut self) -> &mut Self {
         let (sender, receiver) = crossbeam_channel::unbounded();
-        self.insert_resource(CrossbeamMessageSender::<T>(sender));
-        self.insert_resource(CrossbeamMessageReceiver::<T>(receiver));
+        self.insert_resource(ChannelMessageSender::<T>(sender));
+        self.insert_resource(ChannelMessageReceiver::<T>(receiver));
         self.add_message::<T>();
         self.add_systems(PreUpdate, process_channel_messages::<T>);
         self
@@ -37,7 +37,7 @@ impl CrossbeamMessageApp for App {
 }
 
 fn process_channel_messages<T: Message>(
-    receiver: Res<CrossbeamMessageReceiver<T>>,
+    receiver: Res<ChannelMessageReceiver<T>>,
     mut events: MessageWriter<T>,
 ) {
     loop {
