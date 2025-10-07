@@ -7,10 +7,43 @@
 Send events via a channel from anywhere (eg. web-dom, c-ffi) to Bevy Observers.
 Based on the original [bevy_crossbeam_event](https://github.com/johanhelsing/bevy_crossbeam_event) but reverting to the buffered message system instead of migrating to observer/triggers as it did in `0.9`.
 
-# example
+# usage
 
-```rust
+Add add events to your app using `.add_channel_message::<EventType>`:
 
+```rust ignore
+#[derive(Message, Clone, Debug)]
+struct LobbyJoined(Lobby);
+
+impl Plugin for MyPlugin {
+    fn build(&self, app: &mut App) {
+        app.add_channel_message::<LobbyJoined>();
+        app.add_startup_system(setup);
+        app.add_system(handle_lobby_joined);
+    }
+}
+```
+
+Fire events by using `Res<ChannelMessageSender<EventType>>` (which can be
+cloned and sent into callbacks):
+
+```rust ignore
+fn setup(service: Res<ThirdPartyCode>, sender: Res<ChannelMessageSender<LobbyJoined>>) {
+    let sender = sender.clone();
+    service.join_lobby(id, move |lobby| {
+        sender.send(LobbyJoined(lobby));
+    });
+}
+```
+
+Handle the events just like normal Bevy events (which they are):
+
+```rust ignore
+fn handle_lobby_joined(mut lobby_joined_events: MessageReader<LobbyJoined>) {
+    for lobby in lobby_joined_events.read() {
+        info!("lobby joined: {lobby:?}");
+    }
+}
 ```
 
 ## Our Other Crates
