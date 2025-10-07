@@ -22,21 +22,21 @@ impl<T: Message> CrossbeamMessageSender<T> {
 struct CrossbeamMessageReceiver<T: Message>(Receiver<T>);
 
 pub trait CrossbeamMessageApp {
-    fn add_crossbeam_message<T: Message>(&mut self) -> &mut Self;
+    fn add_channel_message<T: Message>(&mut self) -> &mut Self;
 }
 
 impl CrossbeamMessageApp for App {
-    fn add_crossbeam_message<T: Message>(&mut self) -> &mut Self {
+    fn add_channel_message<T: Message>(&mut self) -> &mut Self {
         let (sender, receiver) = crossbeam_channel::unbounded();
         self.insert_resource(CrossbeamMessageSender::<T>(sender));
         self.insert_resource(CrossbeamMessageReceiver::<T>(receiver));
         self.add_message::<T>();
-        self.add_systems(PreUpdate, process_crossbeam_messages::<T>);
+        self.add_systems(PreUpdate, process_channel_messages::<T>);
         self
     }
 }
 
-fn process_crossbeam_messages<T: Message>(
+fn process_channel_messages<T: Message>(
     receiver: Res<CrossbeamMessageReceiver<T>>,
     mut events: MessageWriter<T>,
 ) {
