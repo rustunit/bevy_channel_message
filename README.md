@@ -65,7 +65,8 @@ fn handle_lobby_joined(mut lobby_joined_events: MessageReader<LobbyJoined>) {
 
 |bevy|our version|
 |-|-|
-|0.17|0.1,main|
+|0.18|0.2,main|
+|0.17|0.1|
 
 ## License
 
