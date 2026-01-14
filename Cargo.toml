@@ -1,6 +1,6 @@
 [package]
 name = "bevy_channel_message"
-version = "0.1.1"
+version = "0.2.0"
 edition = "2024"
 authors = ["Rustunit <mail@rustunit.com>"]
 categories = ["game-development"]
@@ -11,5 +11,9 @@ repository = "https://github.com/rustunit/bevy_channel_message"
 readme = "README.md"
 
 [dependencies]
-bevy = { version = "0.17", default-features = false }
+bevy_ecs = { version = "0.18", default-features = false }
+bevy_app = { version = "0.18", default-features = false }
 crossbeam-channel = "0.5"
+
+[dev-dependencies]
+bevy = "0.18"

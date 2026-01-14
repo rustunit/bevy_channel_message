@@ -1,4 +1,9 @@
-use bevy::prelude::*;
+use bevy_app::{App, PreUpdate};
+use bevy_ecs::{
+    message::{Message, MessageWriter},
+    resource::Resource,
+    system::Res,
+};
 use crossbeam_channel::{Receiver, Sender, TryRecvError, TrySendError};
 
 #[derive(Resource, Clone, Debug)]
