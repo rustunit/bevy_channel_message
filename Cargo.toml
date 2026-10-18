@@ -16,4 +16,4 @@ bevy_app = { version = "0.20.0", default-features = false }
 crossbeam-channel = "0.5"
 
 [dev-dependencies]
-bevy = "0.20.0"
+bevy = { version = "0.20.0", default-features = false }
