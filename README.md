@@ -63,12 +63,13 @@ fn handle_lobby_joined(mut lobby_joined_events: MessageReader<LobbyJoined>) {
 
 ## Compatible Bevy Versions
 
-|bevy|our version|
-|-|-|
-|0.19|0.3,main|
-|0.18|0.2|
-|0.17|0.1|
+| bevy | our version |
+|------|-------------|
+| 0.20 | 0.4,main    |
+| 0.19 | 0.3         |
+| 0.18 | 0.2         |
+| 0.17 | 0.1         |
 
 ## License
 
-this crate is dual-licensed under either [MIT](https://opensource.org/license/MIT) or [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0), at your option.
+This crate is dual-licensed under either [MIT](https://opensource.org/license/MIT) or [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0), at your option.
